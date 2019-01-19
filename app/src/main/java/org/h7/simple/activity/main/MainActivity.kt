@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.h7.simple.R
@@ -29,7 +31,7 @@ abstract class MainActivity : AppCompatActivity() {
     abstract fun getNavViewModel():INavViewModel
 
     private lateinit var modelNavigation: INavViewModel
-
+    var mywebview: WebView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding : ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -43,6 +45,15 @@ abstract class MainActivity : AppCompatActivity() {
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        mywebview = findViewById<WebView>(R.id.help_webview)
+        mywebview!!.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                view?.loadUrl(url)
+                return true
+            }
+        }
+        mywebview!!.loadUrl("https://www.google.co.in/")
     }
 
     private fun initMenu() {
